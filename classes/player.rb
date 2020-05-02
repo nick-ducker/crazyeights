@@ -9,7 +9,7 @@ class Player
 
     @player_number = player_number
     @name = name
-    @hand = Array.new
+    @hand = nil
     @score = 0
 
   end
