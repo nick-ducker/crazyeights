@@ -34,13 +34,13 @@ class GameTest < Test::Unit::TestCase
 
     game = Game.new
     inputarr = ["H2"]
-    game.deleter(inputarr, game.deck)
-    assert_equal(51, game.deck.size)
+    game.deleter(inputarr, game.deck.deck)
+    assert_equal(51, game.deck.deck.size)
 
     game = Game.new
     inputarr = ["H2", "C7", "SQ", "DJ"]
-    game.deleter(inputarr, game.deck)
-    assert_equal(48, game.deck.size)
+    game.deleter(inputarr, game.deck.deck)
+    assert_equal(48, game.deck.deck.size)
 
   end
 
@@ -50,6 +50,11 @@ class GameTest < Test::Unit::TestCase
     game = Game.new
     input = "H7"
     assert_equal(true, game.validator(input,game.top_card, true))
+
+    #Case: Start of game, invalid
+    game = Game.new
+    input = "H8"
+    assert_equal(false, game.validator(input,game.top_card, true))
     
     #Case: In turn, valid selection
     game = Game.new
@@ -57,9 +62,9 @@ class GameTest < Test::Unit::TestCase
     game.top_card = "H9"
     assert_equal(true, game.validator(input, game.top_card))
 
-    #Case: In turn, valid selection
+    #Case: In turn, invalid selection
     game = Game.new
-    input = "H7"
+    input = "C6"
     game.top_card = "H9"
     assert_equal(false, game.validator(input, game.top_card))
 
@@ -86,7 +91,7 @@ class GameTest < Test::Unit::TestCase
     game.add_player("Samuel")
     game.add_player("Judy")
     game.add_player("Kara")
-    game.current_player = 3
+    game.current_player = 2
     game.player_select
     assert_equal(3, game.current_player)
 
@@ -95,7 +100,7 @@ class GameTest < Test::Unit::TestCase
     game.add_player("Samuel")
     game.add_player("Judy")
     game.add_player("Kara")
-    game.current_player = 4
+    game.current_player = 3
     game.player_select
     assert_equal(0, game.current_player)
 
@@ -104,14 +109,14 @@ class GameTest < Test::Unit::TestCase
   def test_suit_selector
 
     game = Game.new
-    game.suit_select("Spades")
+    game.suit = game.suit_select("Spades")
     assert_equal("Spades", game.suit)
 
     game = Game.new
-    game.suit_select("Hearts")
+    game.suit = game.suit_select("Hearts")
     assert_equal("Hearts", game.suit)
 
-    exception = assert_raise(StandardError) {game.suit_select("fbewuaidenawi")}
+    exception = assert_raise {game.suit_select("fbewuaidenawi")}
     assert_equal("That is an invalid selection", exception.message)
 
   end
@@ -122,14 +127,15 @@ class GameTest < Test::Unit::TestCase
     game.add_player("Nick")
     game.add_player("Samuel")
     game.current_player = 0
-    assert_equal(false, game.check_for_win(game.player_array[game.current_player]))
+    game.player_array[game.current_player].hand = []
+    assert_equal(false, game.check_for_win)
 
     game = Game.new
     game.add_player("Nick")
     game.add_player("Samuel")
     game.current_player = 0
-    game.player_array[game.current_player] = ["H2","C8","DQ","DJ"]
-    assert_equal(true, game.check_for_win(game.player_array[game.current_player]))
+    game.player_array[game.current_player].hand = ["H2","C8","DQ","DJ"]
+    assert_equal(true, game.check_for_win)
 
   end
 
@@ -137,14 +143,15 @@ class GameTest < Test::Unit::TestCase
 
     game = Game.new
     game.add_player("Nick")
+    game.player_array[0].hand = []
 
     game.add_player("Samuel")
     game.player_array[1].hand = ["H2","C8"]
 
     game.add_player("Judy")
-    game.player_array[1].hand = ["DQ","DJ"]
+    game.player_array[2].hand = ["DQ","DJ"]
 
-    game.player_array[0].score += game.victory_score(game.player_array)
+    game.player_array[0].score += game.victory_score
 
     assert_equal(30, game.player_array[0].score)
 
