@@ -9,12 +9,12 @@ class GameTest < Test::Unit::TestCase
   def test_player_add
 
     game = Game.new
-    game.add_player(1,"Nick")
+    game.add_player("Nick")
     assert_equal(1, game.player_array.length)
 
     game = Game.new
-    game.add_player(1,"Nick")
-    game.add_player(2,"Samuel")        
+    game.add_player("Nick")
+    game.add_player("Samuel")        
     assert_equal(2, game.player_array.length)
 
   end
@@ -74,27 +74,27 @@ class GameTest < Test::Unit::TestCase
   def test_player_selector
 
     game = Game.new
-    game.add_player(1,"Nick")
-    game.add_player(2,"Samuel")
-    game.add_player(3,"Judy")
-    game.add_player(4,"Kara")
+    game.add_player("Nick")
+    game.add_player("Samuel")
+    game.add_player("Judy")
+    game.add_player("Kara")
     game.player_select
     assert_equal(0, game.current_player)
 
     game = Game.new
-    game.add_player(1,"Nick")
-    game.add_player(2,"Samuel")
-    game.add_player(3,"Judy")
-    game.add_player(4,"Kara")
+    game.add_player("Nick")
+    game.add_player("Samuel")
+    game.add_player("Judy")
+    game.add_player("Kara")
     game.current_player = 3
     game.player_select
     assert_equal(3, game.current_player)
 
     game = Game.new
-    game.add_player(1,"Nick")
-    game.add_player(2,"Samuel")
-    game.add_player(3,"Judy")
-    game.add_player(4,"Kara")
+    game.add_player("Nick")
+    game.add_player("Samuel")
+    game.add_player("Judy")
+    game.add_player("Kara")
     game.current_player = 4
     game.player_select
     assert_equal(0, game.current_player)
@@ -119,14 +119,14 @@ class GameTest < Test::Unit::TestCase
   def test_check_for_win
 
     game = Game.new
-    game.add_player(1,"Nick")
-    game.add_player(2,"Samuel")
+    game.add_player("Nick")
+    game.add_player("Samuel")
     game.current_player = 0
     assert_equal(false, game.check_for_win(game.player_array[game.current_player]))
 
     game = Game.new
-    game.add_player(1,"Nick")
-    game.add_player(2,"Samuel")
+    game.add_player("Nick")
+    game.add_player("Samuel")
     game.current_player = 0
     game.player_array[game.current_player] = ["H2","C8","DQ","DJ"]
     assert_equal(true, game.check_for_win(game.player_array[game.current_player]))
@@ -136,12 +136,12 @@ class GameTest < Test::Unit::TestCase
   def test_scoring
 
     game = Game.new
-    game.add_player(1,"Nick")
+    game.add_player("Nick")
 
-    game.add_player(2,"Samuel")
+    game.add_player("Samuel")
     game.player_array[1].hand = ["H2","C8"]
 
-    game.add_player(3,"Judy")
+    game.add_player("Judy")
     game.player_array[1].hand = ["DQ","DJ"]
 
     game.player_array[0].score += game.victory_score(game.player_array)
@@ -157,12 +157,12 @@ class PlayerTest < Test::Unit::TestCase
   def test_hand_assignment
 
     hand = ["H2","C8","DQ","DJ"]
-    player = Player.new(1, "Nick")
+    player = Player.new("Nick")
     player.hand = hand
     assert_equal(["H2","C8","DQ","DJ"], player.hand)
 
     hand = ["C2","D8","SQ","HJ"]
-    player = Player.new(1, "Nick")
+    player = Player.new("Nick")
     player.hand = hand
     assert_equal(["C2","D8","SQ","HJ"], player.hand)
 
@@ -171,7 +171,7 @@ class PlayerTest < Test::Unit::TestCase
   def test_card_selection
 
     hand = ["H2","C8","DQ","DJ"]
-    player = Player.new(1, "Nick")
+    player = Player.new("Nick")
     player.hand = hand
     assert_equal("H2", player.card_select("H2"))
     assert_equal("PASS", player.card_select("PASS"))
