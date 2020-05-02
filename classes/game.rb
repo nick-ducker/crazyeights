@@ -1,6 +1,9 @@
-
+require_relative 'deck'
 
 class Game
+
+  attr_reader :player_array
+  attr_accessor :top_card
 
   def initialize
 
@@ -9,6 +12,7 @@ class Game
     @numrounds = 3
     @suit = nil
     @top_card = nil
+    @deck = Deck.new
 
   end
 
